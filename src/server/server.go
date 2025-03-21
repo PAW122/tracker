@@ -13,7 +13,7 @@ import (
 
 // Obsługa CORS
 func enableCORS(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*") // Możesz ustawić konkretną domenę zamiast "*"
+	w.Header().Set("Access-Control-Allow-Origin", "https://repaircenter.tsunamistudio.net")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 }
