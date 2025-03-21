@@ -11,10 +11,23 @@ import (
 	dbclient "github.com/PAW122/TsunamiDB/lib/dbclient"
 )
 
+// Obsługa CORS
 func enableCORS(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Origin", "*") // Możesz ustawić konkretną domenę zamiast "*"
 	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+}
+
+// Globalny handler dla `OPTIONS`
+func corsMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		enableCORS(w)
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		next(w, r)
+	}
 }
 
 func StartServer(port string) {
@@ -30,18 +43,12 @@ func StartServer(port string) {
 		w.Write([]byte("Tracking..."))
 	})
 
-	mux.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
-		enableCORS(w) // Ustaw nagłówki CORS przed przekazaniem obsługi do `api.Register_api`
-		api.Register_api(w, r)
-	})
-	mux.HandleFunc("/raport", func(w http.ResponseWriter, r *http.Request) {
-		enableCORS(w)
-		api.Raport_api(w, r)
-	})
+	mux.HandleFunc("/register", corsMiddleware(api.Register_api))
+	mux.HandleFunc("/raport", corsMiddleware(api.Raport_api))
 
 	fmt.Println("Server running on port", port)
 	err := http.ListenAndServe(port, mux)
 	if err != nil {
-		log.Fatal("Error runing server: ", err)
+		log.Fatal("Error running server: ", err)
 	}
 }
