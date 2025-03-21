@@ -1,6 +1,6 @@
 # tracker
  
-simple time usage tracker for web pages
+a simple server to monitor the time users spend on a website
 build on TsunamiDB
 
 # todo
