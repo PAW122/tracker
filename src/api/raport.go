@@ -25,7 +25,6 @@ type Record struct {
 }
 
 func Raport_api(w http.ResponseWriter, r *http.Request) {
-	enableCORS(w)
 	ip := r.RemoteAddr
 	if strings.Contains(ip, ":") {
 		ip, _, _ = strings.Cut(ip, ":")

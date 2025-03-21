@@ -9,7 +9,6 @@ import (
 )
 
 func Register_api(w http.ResponseWriter, r *http.Request) {
-	enableCORS(w)
 	ip := r.RemoteAddr
 
 	// Sprawdź, czy adres zawiera port i usuń go
